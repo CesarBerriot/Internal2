@@ -11,7 +11,7 @@ static FILE * file;
 static char * file_path;
 static char * file_buffer;
 static int file_buffer_length;
-static bool is_string, is_preprocessor_instruction;
+static bool is_character, is_string, is_preprocessor_instruction;
 
 static void compute_file_path(void);
 static void cleanup_file_path(void);
@@ -70,7 +70,10 @@ static void process_file_buffer(void)
 {	for(int i = 0; i < file_buffer_length; ++i)
 	{	char character = file_buffer[i];
 		switch(character)
-		{	case '"':
+		{	case '\'':
+				is_character = !is_character;
+				break;
+			case '"':
 				is_string = !is_string;
 				break;
 			case '#':
@@ -82,7 +85,7 @@ static void process_file_buffer(void)
 				is_preprocessor_instruction = false;
 				break;
 			case '@':
-				if(!is_string && !is_preprocessor_instruction)
+				if(!is_character && !is_string && !is_preprocessor_instruction)
 				{	ha_assert
 					(	fputs(make_string("internal2_%s_", arguments[ARGUMENT_GUID]), file) >= 0,
 						MODULE_NAME,
