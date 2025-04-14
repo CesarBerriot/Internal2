@@ -1,3 +1,16 @@
+block()
+  set(unsupported_generators Ninja "Ninja Multi-Config")
+  set(supported_generators "Visual Studio 17 2022" "Visual Studio 16 2019" "Visual Studio 15 2017" "MinGW Makefiles" "NMake Makefiles")
+
+  if(CMAKE_GENERATOR IN_LIST unsupported_generators)
+    message(FATAL_ERROR "Due to post build commands not being called when compiling unchanged targets, the ${CMAKE_GENERATOR} generator isn't supported by Internal2. Please use a different generator.")
+  endif()
+
+  if(NOT CMAKE_GENERATOR IN_LIST supported_generators)
+    message(WARNING "The current generator (${CMAKE_GENERATOR}) isn't officially supported by Internal2. Issues might arise.")
+  endif()
+endblock()
+
 function(internal2_setup_target target)
   macro(compute_guid)
     string(RANDOM LENGTH 32 guid)
