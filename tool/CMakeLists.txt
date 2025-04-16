@@ -21,5 +21,6 @@ function(process_compile_options compiler_identifier)
   endif()
 endfunction()
 
+process_compile_options(MSVC /Oi-)
 process_compile_options(GNU -Wno-builtin-declaration-mismatch)
 process_compile_options(Clang -Wno-incompatible-library-redeclaration)
